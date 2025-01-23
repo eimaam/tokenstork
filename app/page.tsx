@@ -138,7 +138,7 @@ export default function TokenDataPage() {
       title: 'Token Name',
       dataIndex: 'name',
       key: 'name',
-      render: (text, token) => (
+      render: (text:string, token:any) => (
         <Space>
           <Image
             src={getIPFSUrl(token.icon)}
@@ -229,7 +229,7 @@ export default function TokenDataPage() {
       key: 'marketCapBigInt',
       sorter: true,
       align: 'right',
-      render: (_, token) => formatMarketCap(token.marketCap),
+      render: (_:any, token:any) => formatMarketCap(token.marketCap),
     },
     {
       title: (
@@ -266,11 +266,11 @@ export default function TokenDataPage() {
       dataIndex: 'category',
       key: 'category',
       align: 'right',
-      render: (category) => <FormatCategory category={category} />,
+      render: (category:string) => <FormatCategory category={category} />,
     },
   ];
 
-  const handleTableChange = (pagination, filters, sorter) => {
+  const handleTableChange = (pagination:any, filters:any, sorter:any) => {
     setSortState({
       column: sorter.field || 'tvl',
       direction: sorter.order === 'ascend' ? 'asc' : 'desc',
