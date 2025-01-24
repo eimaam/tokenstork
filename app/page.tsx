@@ -1,5 +1,3 @@
-// app/page.tsx
-
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -20,20 +18,9 @@ import TokenSkeleton from "@/app/components/TokenSkeleton";
 import FormatCategory from "@/app/components/FormatCategory";
 import BottomCards from "@/app/components/BottomCards";
 
-// import { InformationCircleIcon } from "@heroicons/react/solid";
-import { InformationCircleIcon } from "@heroicons/react/24/solid";
-import {
-  Flex,
-  Icon,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeaderCell,
-  TableRow,
-  Title,
-} from "@tremor/react";
-
+import { Table, Tooltip, Typography, Card, Statistic, Space, Tag } from "antd";
+import { InfoCircleOutlined } from "@ant-design/icons";
+import { ColumnType } from "antd/es/table";
 // TODO: explore search example from https://github.com/vercel/nextjs-postgres-nextauth-tailwindcss-template/tree/main
 // TODO: should this be all server and zero client?
 // TODO: does the new UI work via proxy?
@@ -146,175 +133,178 @@ export default function TokenDataPage() {
     return <p>No token data available.</p>;
   }
 
-  return (
-    <main className="px-1 sm:px-2 lg:px-4 text-lg">
-      <h2 className="text-3xl font-extrabold mb-4">
-        <span className="text-transparent bg-clip-text bg-gradient-to-r to-accent from-primary">
-          Today&apos;s BCH CashTokens Prices
-        </span>
-      </h2>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <div>
-          <Table className="mt-6">
-            <TableHead>
-              <TableRow>
-                <TableHeaderCell>Token Name</TableHeaderCell>
-                <TableHeaderCell>
-                  Ticker
-                  <Icon
-                    icon={InformationCircleIcon}
-                    variant="simple"
-                    tooltip="Token metadata subject to change"
-                    className="align-middle"
-                  />
-                </TableHeaderCell>
-                <TableHeaderCell
-                  className="text-right cursor-pointer"
-                  onClick={() => onSort("price")}
-                >
-                  Price ($){" "}
-                  {sortState.column === "price" ? (
-                    <span>{sortState.direction === "asc" ? "↑" : "↓"}</span>
-                  ) : (
-                    <span>↕</span>
-                  )}
-                  <Icon
-                    icon={InformationCircleIcon}
-                    variant="simple"
-                    tooltip="Prices are highly speculative"
-                    className="align-middle"
-                  />
-                </TableHeaderCell>
-                <TableHeaderCell className="text-right cursor-pointer">
-                  Circulating Supply
-                  <Icon
-                    icon={InformationCircleIcon}
-                    variant="simple"
-                    tooltip="The supply present at the authbase"
-                    className="align-middle"
-                  />
-                </TableHeaderCell>
-                <TableHeaderCell className="text-right cursor-pointer">
-                  Max Supply{" "}
-                  <Icon
-                    icon={InformationCircleIcon}
-                    variant="simple"
-                    tooltip="Max supply is always fixed at genesis"
-                    className="align-middle"
-                  />
-                </TableHeaderCell>
-                <TableHeaderCell
-                  className="text-right cursor-pointer"
-                  onClick={() => onSort("marketCapBigInt")}
-                >
-                  Market Cap ($){" "}
-                  {sortState.column === "marketCapBigInt" ? (
-                    <span>{sortState.direction === "asc" ? "↑" : "↓"}</span>
-                  ) : (
-                    <span>↕</span>
-                  )}
-                  <Icon
-                    icon={InformationCircleIcon}
-                    variant="simple"
-                    tooltip="Market caps are highly speculative"
-                    className="align-middle"
-                  />
-                </TableHeaderCell>
-                <TableHeaderCell
-                  className="text-right cursor-pointer"
-                  onClick={() => onSort("tvl")}
-                >
-                  TVL ($){" "}
-                  <Icon
-                    icon={InformationCircleIcon}
-                    variant="simple"
-                    tooltip="Total Value Locked"
-                    className="align-middle"
-                  />
-                  <span>
-                    {sortState.column === "tvl"
-                      ? sortState.direction === "asc"
-                        ? "↑"
-                        : "↓"
-                      : "↕"}
-                  </span>
-                </TableHeaderCell>
-                <TableHeaderCell className="text-right">
-                  Token Category{" "}
-                  <Icon
-                    icon={InformationCircleIcon}
-                    variant="simple"
-                    tooltip="Sometimes referred to as TokenID"
-                    className="align-middle"
-                  />
-                </TableHeaderCell>
-              </TableRow>
-            </TableHead>
+  const columns = [
+    {
+      title: 'Token Name',
+      dataIndex: 'name',
+      key: 'name',
+      render: (text, token) => (
+        <Space>
+          <Image
+            src={getIPFSUrl(token.icon)}
+            alt={token.name}
+            width={32}
+            height={32}
+            className="rounded-full"
+            title={token.description}
+          />
+          <Tooltip title={token.description}>
+            <Typography.Text strong>
+              {token.name.length > 22 ? token.name.substr(0, 22) + '...' : token.name}
+            </Typography.Text>
+          </Tooltip>
+        </Space>
+      ),
+    },
+    {
+      title: (
+        <Space>
+          Ticker
+          <Tooltip title="Token metadata subject to change">
+            <InfoCircleOutlined />
+          </Tooltip>
+        </Space>
+      ),
+      dataIndex: 'symbol',
+      key: 'symbol',
+    },
+    {
+      title: (
+        <Space>
+          Price ($)
+          <Tooltip title="Prices are highly speculative">
+            <InfoCircleOutlined />
+          </Tooltip>
+        </Space>
+      ),
+      dataIndex: 'price',
+      key: 'price',
+      sorter: true,
+      align: 'right',
+      render: (price:number) =>
+        price === 0
+          ? '-'
+          : price >= 1
+          ? `$${price.toFixed(2)}`
+          : `$${price.toFixed(6)}`,
+    },
+    {
+      title: (
+        <Space>
+          Circulating Supply
+          <Tooltip title="The supply present at the authbase">
+            <InfoCircleOutlined />
+          </Tooltip>
+        </Space>
+      ),
+      dataIndex: 'circulatingSupply',
+      key: 'circulatingSupply',
+      align: 'right',
+      render: (supply:number) => humanizeBigNumber(Number(supply)),
+    },
+    {
+      title: (
+        <Space>
+          Max Supply
+          <Tooltip title="Max supply is always fixed at genesis">
+            <InfoCircleOutlined />
+          </Tooltip>
+        </Space>
+      ),
+      dataIndex: 'maxSupply',
+      key: 'maxSupply',
+      align: 'right',
+      render: (supply:number) => humanizeBigNumber(Number(supply)),
+    },
+    {
+      title: (
+        <Space>
+          Market Cap ($)
+          <Tooltip title="Market caps are highly speculative">
+            <InfoCircleOutlined />
+          </Tooltip>
+        </Space>
+      ),
+      dataIndex: 'marketCapBigInt',
+      key: 'marketCapBigInt',
+      sorter: true,
+      align: 'right',
+      render: (_, token) => formatMarketCap(token.marketCap),
+    },
+    {
+      title: (
+        <Space>
+          TVL ($)
+          <Tooltip title="Total Value Locked">
+            <InfoCircleOutlined />
+          </Tooltip>
+        </Space>
+      ),
+      dataIndex: 'tvl',
+      key: 'tvl',
+      sorter: true,
+      align: 'right',
+      render: (tvl:number) =>
+        Number(tvl) === 0
+          ? '-'
+          : Number(tvl) >= 1000
+          ? `$${Number(tvl).toLocaleString('en-US', {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            })}`
+          : `$${Number(tvl).toFixed(0)}`,
+    },
+    {
+      title: (
+        <Space>
+          Token Category
+          <Tooltip title="Sometimes referred to as TokenID">
+            <InfoCircleOutlined />
+          </Tooltip>
+        </Space>
+      ),
+      dataIndex: 'category',
+      key: 'category',
+      align: 'right',
+      render: (category) => <FormatCategory category={category} />,
+    },
+  ];
 
-            <TableBody className="!opacity-100">
-              {sortedData.map((token) => (
-                <TableRow
-                  key={token.name}
-                  className="transition duration-200 ease-in-out cursor-pointer hover:shadow-lg hover:bg-gradient-to-r from-violet-600/20 to-indigo-600/10"
-                >
-                  <TableCell>
-                    <Image
-                      src={getIPFSUrl(token.icon)}
-                      alt={token.name}
-                      width={32}
-                      height={32}
-                      className="rounded-full inline align-middle"
-                      title={token.description}
-                    />{" "}
-                    <span
-                      className="align-middle font-semibold"
-                      title={token.description}
-                    >
-                      {token.name.length > 22
-                        ? token.name.substr(0, 22) + "..."
-                        : token.name}
-                    </span>
-                  </TableCell>
-                  <TableCell>{token.symbol}</TableCell>
-                  <TableCell className="text-right hover:text-xl">
-                    {token.price === 0
-                      ? "-"
-                      : token.price >= 1
-                      ? "$" + token.price.toFixed(2)
-                      : "$" + token.price.toFixed(6)}
-                  </TableCell>
-                  <TableCell className="text-right hover:text-xl">
-                    {humanizeBigNumber(Number(token.circulatingSupply))}
-                  </TableCell>
-                  <TableCell className="text-right hover:text-xl">
-                    {humanizeBigNumber(Number(token.maxSupply))}
-                  </TableCell>
-                  <TableCell className="text-right hover:text-xl">
-                    {formatMarketCap(token.marketCap)}
-                  </TableCell>
-                  <TableCell className="text-right hover:text-xl">
-                    {Number(token.tvl) === 0
-                      ? "-"
-                      : Number(token.tvl) >= 1000
-                      ? "$" +
-                        Number(token.tvl).toLocaleString("en-US", {
-                          minimumFractionDigits: 0,
-                          maximumFractionDigits: 0,
-                        })
-                      : "$" + Number(token.tvl).toFixed(0)}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <FormatCategory category={token.category} />
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          <BottomCards />
-        </div>
-      )}
+  const handleTableChange = (pagination, filters, sorter) => {
+    setSortState({
+      column: sorter.field || 'tvl',
+      direction: sorter.order === 'ascend' ? 'asc' : 'desc',
+    });
+  };
+
+  return (
+    <main className="p-4 lg:p-8 bg-white dark:bg-gray-900">
+      <Card className="shadow-sm">
+        <Typography.Title level={2} className="mb-6">
+          <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            Today&apos;s BCH CashTokens Prices
+          </span>
+        </Typography.Title>
+
+        <Table
+          columns={columns as ColumnType<TokenData>[]}
+          dataSource={sortedData}
+          rowKey="name"
+          loading={loading}
+          onChange={handleTableChange}
+          pagination={{
+            position: ['bottomCenter'],
+            showSizeChanger: true,
+            showQuickJumper: true,
+            defaultPageSize: 10,
+            pageSizeOptions: ['10', '20', '50', '100'],
+          }}
+          scroll={{ x: true }}
+          // className="crypto-table"
+        />
+
+        <BottomCards />
+      </Card>
     </main>
   );
 }

@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 const colors = require("tailwindcss/colors");
 
@@ -23,6 +24,11 @@ const config: Config = {
     "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    screens: {
+      sm: { max: "820px" },
+      md: { min: "820px" },
+      lg: { min: "1510px" },
+    },
     colors: {
       transparent: "transparent",
       current: "currentColor",
@@ -141,6 +147,9 @@ const config: Config = {
         "tremor-small": "0.375rem",
         "tremor-default": "0.5rem",
         "tremor-full": "9999px",
+        lg: "1rem",
+        md: "calc(1rem - 2px)",
+        sm: "calc(1rem - 4px)",
       },
       fontSize: {
         "tremor-label": "0.75rem",
@@ -180,6 +189,6 @@ const config: Config = {
     },
   ],
 
-  plugins: [require("@headlessui/tailwindcss")],
+  plugins: [tailwindcssAnimate, require("@headlessui/tailwindcss")],
 };
 export default config;
