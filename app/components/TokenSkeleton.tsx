@@ -130,18 +130,15 @@ const TokenSkeleton = () => {
   ];
 
   return (
-    <main className="">
-      
-      <Card className="shadow-sm !rounded-none">
-        
-
+    <main>
+      <div className="shadow-sm !rounded-none">
         <Table
           columns={columns as ColumnType<any>[]}
           dataSource={skeletonData}
           pagination={false}
           scroll={{ x: true }}
         />
-      </Card>
+      </div>
     </main>
   );
 };
