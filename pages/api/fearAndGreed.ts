@@ -9,6 +9,7 @@ export default async function handler(
 
     // Check if the API key exists
     const apiKey = process.env.FEAR_AND_GREED_API_KEY;
+    console.log("Using api key: ", apiKey, " for fear and greed")
     if (!apiKey) {
       throw new Error("FEAR_AND_GREED_API_KEY is not set");
     }
@@ -24,6 +25,7 @@ export default async function handler(
     const data = await response.json();
     res.status(200).json(data);
   } catch (error) {
+    console.log("There was an error getting fear and greed data", error)
     res.status(500).json({ error: "Failed to fetch data" });
   }
 }

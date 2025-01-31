@@ -25,110 +25,104 @@ const config: Config = {
   ],
   theme: {
     screens: {
-      sm: { max: "820px" },
-      md: { min: "820px" },
-      lg: { min: "1510px" },
-    },
-    colors: {
-      transparent: "transparent",
-      current: "currentColor",
-      primary: "#4f359b",
-      secondary: "#ff6b6b",
-      accent: "#0ac18e",
-      background: "#f0eff4",
-      textcolor: "#343a40",
-      symbolcolor: "#888",
-      altrow: "#e9fcec",
-      twitter: "#1da1f2",
-      linkhover: "#693cc4",
-      linkactive: "#2b185b",
-      linkvisited: "#9166cc",
-      black: colors.black,
-      white: colors.white,
-      gray: colors.gray,
-      slate: colors.slate,
-      emerald: colors.emerald,
-      indigo: colors.indigo,
-      violet: colors.violet,
-      yellow: colors.yellow,
-      fuchsia: colors.fuchsia,
-      pink: colors.pink,
-    },
-    fontSize: {
-      sm: "0.8rem",
-      base: "1.25rem",
-      xl: "1.5rem",
-      "2xl": "1.563rem",
-      "3xl": "1.953rem",
-      "4xl": "2.441rem",
-      "5xl": "3.052rem",
+      sm: { max: '820px' },
+      md: { min: '820px' },
+      lg: { min: '1510px' },
     },
     container: {
       center: true,
     },
     extend: {
       colors: {
-        // light mode
-        tremor: {
-          brand: {
-            faint: "#eff6ff", // blue-50
-            muted: "#bfdbfe", // blue-200
-            subtle: "#60a5fa", // blue-400
-            DEFAULT: "#3b82f6", // blue-500
-            emphasis: "#1d4ed8", // blue-700
-            inverted: "#ffffff", // white
-          },
-          background: {
-            muted: "#f9fafb", // gray-50
-            subtle: "#f3f4f6", // gray-100
-            DEFAULT: "#ffffff", // white
-            emphasis: "#374151", // gray-700
-          },
-          border: {
-            DEFAULT: "#e5e7eb", // gray-200
-          },
-          ring: {
-            DEFAULT: "#e5e7eb", // gray-200
-          },
-          content: {
-            subtle: "#9ca3af", // gray-400
-            DEFAULT: "#000", // gray-500
-            emphasis: "#374151", // gray-700
-            strong: "#111827", // gray-900
-            inverted: "#ffffff", // white
-          },
-        },
-        // dark mode
-        "dark-tremor": {
-          brand: {
-            faint: "#0B1229", // custom
-            muted: "#172554", // blue-950
-            subtle: "#1e40af", // blue-800
-            DEFAULT: "#3b82f6", // blue-500
-            emphasis: "#60a5fa", // blue-400
-            inverted: "#030712", // gray-950
-          },
-          background: {
-            muted: "#131A2B", // custom
-            subtle: "#1f2937", // gray-800
-            DEFAULT: "#111827", // gray-900
-            emphasis: "#d1d5db", // gray-300
-          },
-          border: {
-            DEFAULT: "#1f2937", // gray-800
-          },
-          ring: {
-            DEFAULT: "#1f2937", // gray-800
-          },
-          content: {
-            subtle: "#4b5563", // gray-600
-            DEFAULT: "#6b7280", // gray-500
-            emphasis: "#e5e7eb", // gray-200
-            strong: "#f9fafb", // gray-50
-            inverted: "#000000", // black
-          },
-        },
+        transparent: "transparent",
+        current: "currentColor",
+        primary: "#1b1b1d",
+        secondary: "#21232a",
+        accent: "#06bcee",
+        background: "#1b1b1d",
+        textcolor: "#e3e3e3",
+        danger: "#e11d48",
+
+        symbolcolor: "#888",
+        altrow: "#e9fcec",
+        twitter: "#1da1f2",
+        linkhover: "#693cc4",
+        linkactive: "#2b185b",
+        linkvisited: "#9166cc",
+        black: colors.black,
+        white: colors.white,
+        gray: colors.gray,
+        slate: colors.slate,
+        emerald: colors.emerald,
+        indigo: colors.indigo,
+        violet: colors.violet,
+        yellow: colors.yellow,
+        fuchsia: colors.fuchsia,
+        pink: colors.pink,
       },
+
+      // colors: {
+      //   // light mode
+      //   tremor: {
+      //     brand: {
+      //       faint: "#eff6ff", // blue-50
+      //       muted: "#bfdbfe", // blue-200
+      //       subtle: "#60a5fa", // blue-400
+      //       DEFAULT: "#3b82f6", // blue-500
+      //       emphasis: "#1d4ed8", // blue-700
+      //       inverted: "#ffffff", // white
+      //     },
+      //     background: {
+      //       muted: "#f9fafb", // gray-50
+      //       subtle: "#f3f4f6", // gray-100
+      //       DEFAULT: "#ffffff", // white
+      //       emphasis: "#374151", // gray-700
+      //     },
+      //     border: {
+      //       DEFAULT: "#e5e7eb", // gray-200
+      //     },
+      //     ring: {
+      //       DEFAULT: "#e5e7eb", // gray-200
+      //     },
+      //     content: {
+      //       subtle: "#9ca3af", // gray-400
+      //       DEFAULT: "#000", // gray-500
+      //       emphasis: "#374151", // gray-700
+      //       strong: "#111827", // gray-900
+      //       inverted: "#ffffff", // white
+      //     },
+      //   },
+      //   // dark mode
+      //   "dark-tremor": {
+      //     brand: {
+      //       faint: "#0B1229", // custom
+      //       muted: "#172554", // blue-950
+      //       subtle: "#1e40af", // blue-800
+      //       DEFAULT: "#3b82f6", // blue-500
+      //       emphasis: "#60a5fa", // blue-400
+      //       inverted: "#030712", // gray-950
+      //     },
+      //     background: {
+      //       muted: "#131A2B", // custom
+      //       subtle: "#1f2937", // gray-800
+      //       DEFAULT: "#111827", // gray-900
+      //       emphasis: "#d1d5db", // gray-300
+      //     },
+      //     border: {
+      //       DEFAULT: "#1f2937", // gray-800
+      //     },
+      //     ring: {
+      //       DEFAULT: "#1f2937", // gray-800
+      //     },
+      //     content: {
+      //       subtle: "#4b5563", // gray-600
+      //       DEFAULT: "#6b7280", // gray-500
+      //       emphasis: "#e5e7eb", // gray-200
+      //       strong: "#f9fafb", // gray-50
+      //       inverted: "#000000", // black
+      //     },
+      //   },
+      // },
       boxShadow: {
         // light
         "tremor-input": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
@@ -147,9 +141,14 @@ const config: Config = {
         "tremor-small": "0.375rem",
         "tremor-default": "0.5rem",
         "tremor-full": "9999px",
+
+        none: "0",
+        sm: "0.125rem",
+        md: "0.5rem",
         lg: "1rem",
-        md: "calc(1rem - 2px)",
-        sm: "calc(1rem - 4px)",
+        xl: "2rem",
+        default: "0.25rem",
+        full: "9999px",
       },
       fontSize: {
         "tremor-label": "0.75rem",

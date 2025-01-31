@@ -1,13 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import HelloBar from "@/app/components/HelloBar";
 import Footer from "@/app/components/Footer";
-import Navbar from "@/app/components/Header";
 import CTA from "@/app/components/CTA";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 import { BCHPriceProvider } from "./providers/bchpriceclientprovider";
 import { Montserrat, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { ConfigProvider } from "antd";
+import Navbar from "./components/navigation/NavBar";
+
 
 // custom font
 const bodyFont = Space_Grotesk({
@@ -85,16 +85,19 @@ export default function RootLayout({
               async
             ></script>
           </head>
-          <body className="container mx-auto">
-            <HelloBar />
+          <body>
+            <div className="container mx-auto">
+
             <Navbar />
             {children}
             <CTA />
+            </div>
             <Footer />
             <GoogleAnalytics />
           </body>
         </html>
       </BCHPriceProvider>
     </ConfigProvider>
+
   );
 }

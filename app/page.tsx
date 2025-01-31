@@ -17,10 +17,12 @@ import { useBCHPrice } from "@/app/providers/bchpriceclientprovider";
 import TokenSkeleton from "@/app/components/TokenSkeleton";
 import FormatCategory from "@/app/components/FormatCategory";
 import BottomCards from "@/app/components/BottomCards";
+import InfoCards from "@/app/components/InfoCards";
 
-import { Table, Tooltip, Typography, Card, Statistic, Space, Tag } from "antd";
-import { InfoCircleOutlined } from "@ant-design/icons";
-import { ColumnType } from "antd/es/table";
+import TokenTable from "@/app/components/TokenTable/TokenTable";
+import Header from "./components/Header";
+
+
 // TODO: explore search example from https://github.com/vercel/nextjs-postgres-nextauth-tailwindcss-template/tree/main
 // TODO: should this be all server and zero client?
 // TODO: does the new UI work via proxy?
@@ -74,14 +76,16 @@ export default function TokenDataPage() {
         }
         const fixedPrice = parseFloat(bchPrice.toFixed(2));
 
-    const expire_time = 86400000
-    let expiry;
-    expiry = localStorage.getItem("token_data_cache") || "";
-    if ( expiry == "" || ( parseInt(expiry) - Date.now() ) < 0 )
-    {
-	localStorage.clear();
-	localStorage.setItem( "token_data_cache", String( (Date.now() + expire_time) ) );
-    }
+        const expire_time = 86400000;
+        let expiry;
+        expiry = localStorage.getItem("token_data_cache") || "";
+        if (expiry == "" || parseInt(expiry) - Date.now() < 0) {
+          localStorage.clear();
+          localStorage.setItem(
+            "token_data_cache",
+            String(Date.now() + expire_time)
+          );
+        }
 
         const dataPromises = tokenIds.map(async (category) => {
           try {
@@ -91,7 +95,9 @@ export default function TokenDataPage() {
           }
         });
         const results = await Promise.all(dataPromises);
-        const allTokenData: TokenData[] = results.flat().filter((d): d is TokenData => d !== null);
+        const allTokenData: TokenData[] = results
+          .flat()
+          .filter((d): d is TokenData => d !== null);
         setTokenData(allTokenData);
       } catch (error) {
         if (error instanceof Error) {
@@ -120,191 +126,20 @@ export default function TokenDataPage() {
     return <p>Error: {error}</p>;
   }
 
-  if (loading) {
-    return (
-      <>
-        <TokenSkeleton />
-        <BottomCards />
-      </>
-    );
-  }
+  // if (tokenData.length === 0) {
+  //   return <p>No token data available.</p>;
+  // }
 
-  if (tokenData.length === 0) {
-    return <p>No token data available.</p>;
-  }
-
-  const columns = [
-    {
-      title: 'Token Name',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text:string, token:any) => (
-        <Space>
-          <Image
-            src={getIPFSUrl(token.icon)}
-            alt={token.name}
-            width={32}
-            height={32}
-            className="rounded-full"
-            title={token.description}
-          />
-          <Tooltip title={token.description}>
-            <Typography.Text strong>
-              {token.name.length > 22 ? token.name.substr(0, 22) + '...' : token.name}
-            </Typography.Text>
-          </Tooltip>
-        </Space>
-      ),
-    },
-    {
-      title: (
-        <Space>
-          Ticker
-          <Tooltip title="Token metadata subject to change">
-            <InfoCircleOutlined />
-          </Tooltip>
-        </Space>
-      ),
-      dataIndex: 'symbol',
-      key: 'symbol',
-    },
-    {
-      title: (
-        <Space>
-          Price ($)
-          <Tooltip title="Prices are highly speculative">
-            <InfoCircleOutlined />
-          </Tooltip>
-        </Space>
-      ),
-      dataIndex: 'price',
-      key: 'price',
-      sorter: true,
-      align: 'right',
-      render: (price:number) =>
-        price === 0
-          ? '-'
-          : price >= 1
-          ? `$${price.toFixed(2)}`
-          : `$${price.toFixed(6)}`,
-    },
-    {
-      title: (
-        <Space>
-          Circulating Supply
-          <Tooltip title="The supply present at the authbase">
-            <InfoCircleOutlined />
-          </Tooltip>
-        </Space>
-      ),
-      dataIndex: 'circulatingSupply',
-      key: 'circulatingSupply',
-      align: 'right',
-      render: (supply:number) => humanizeBigNumber(Number(supply)),
-    },
-    {
-      title: (
-        <Space>
-          Max Supply
-          <Tooltip title="Max supply is always fixed at genesis">
-            <InfoCircleOutlined />
-          </Tooltip>
-        </Space>
-      ),
-      dataIndex: 'maxSupply',
-      key: 'maxSupply',
-      align: 'right',
-      render: (supply:number) => humanizeBigNumber(Number(supply)),
-    },
-    {
-      title: (
-        <Space>
-          Market Cap ($)
-          <Tooltip title="Market caps are highly speculative">
-            <InfoCircleOutlined />
-          </Tooltip>
-        </Space>
-      ),
-      dataIndex: 'marketCapBigInt',
-      key: 'marketCapBigInt',
-      sorter: true,
-      align: 'right',
-      render: (_:any, token:any) => formatMarketCap(token.marketCap),
-    },
-    {
-      title: (
-        <Space>
-          TVL ($)
-          <Tooltip title="Total Value Locked">
-            <InfoCircleOutlined />
-          </Tooltip>
-        </Space>
-      ),
-      dataIndex: 'tvl',
-      key: 'tvl',
-      sorter: true,
-      align: 'right',
-      render: (tvl:number) =>
-        Number(tvl) === 0
-          ? '-'
-          : Number(tvl) >= 1000
-          ? `$${Number(tvl).toLocaleString('en-US', {
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 0,
-            })}`
-          : `$${Number(tvl).toFixed(0)}`,
-    },
-    {
-      title: (
-        <Space>
-          Token Category
-          <Tooltip title="Sometimes referred to as TokenID">
-            <InfoCircleOutlined />
-          </Tooltip>
-        </Space>
-      ),
-      dataIndex: 'category',
-      key: 'category',
-      align: 'right',
-      render: (category:string) => <FormatCategory category={category} />,
-    },
-  ];
-
-  const handleTableChange = (pagination:any, filters:any, sorter:any) => {
-    setSortState({
-      column: sorter.field || 'tvl',
-      direction: sorter.order === 'ascend' ? 'asc' : 'desc',
-    });
-  };
 
   return (
-    <main className="p-4 lg:p-8 bg-white dark:bg-gray-900">
-      <Card className="shadow-sm">
-        <Typography.Title level={2} className="mb-6">
-          <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Today&apos;s BCH CashTokens Prices
-          </span>
-        </Typography.Title>
-
-        <Table
-          columns={columns as ColumnType<TokenData>[]}
-          dataSource={sortedData}
-          rowKey="name"
-          loading={loading}
-          onChange={handleTableChange}
-          pagination={{
-            position: ['bottomCenter'],
-            showSizeChanger: true,
-            showQuickJumper: true,
-            defaultPageSize: 10,
-            pageSizeOptions: ['10', '20', '50', '100'],
-          }}
-          scroll={{ x: true }}
-          // className="crypto-table"
-        />
-
-        <BottomCards />
-      </Card>
+    <main className="px-1 sm:px-2 lg:px-4 text-lg">
+      <Header />
+      {loading ? (
+        <TokenSkeleton />
+      ) : (
+          <TokenTable tokenData={tokenData} sortState={sortState} onSort={onSort} />
+      )}
+      <BottomCards />
     </main>
   );
 }
