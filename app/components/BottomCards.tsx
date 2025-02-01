@@ -68,7 +68,7 @@ const BottomCards = () => {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+    <div className="dark:text-textcolor grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
       {cards.map((card, index) => (
         <motion.div
           key={index}

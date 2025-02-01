@@ -59,6 +59,13 @@ const config: Config = {
         yellow: colors.yellow,
         fuchsia: colors.fuchsia,
         pink: colors.pink,
+        gradient: {
+          start: "#1b1b1d",
+          end: "#21232a",
+        },
+        card: {
+          hover: "rgba(6, 188, 238, 0.1)",
+        },
       },
 
       // colors: {
@@ -155,6 +162,15 @@ const config: Config = {
         "tremor-default": ["1rem", { lineHeight: "1.25rem" }],
         "tremor-title": ["1.125rem", { lineHeight: "1.75rem" }],
         "tremor-metric": ["1.875rem", { lineHeight: "2.25rem" }],
+      },
+      animation: {
+        "gradient": "gradient 8s linear infinite",
+      },
+      keyframes: {
+        gradient: {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+        },
       },
     },
   },
