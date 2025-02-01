@@ -1,5 +1,3 @@
-// @/pages/api/bchPrice.ts
-
 import type { NextApiRequest, NextApiResponse } from "next";
 import NextCors from "nextjs-cors";
 
@@ -35,6 +33,7 @@ export default async function handler(
       "https://min-api.cryptocompare.com/data/price?fsym=BCH&tsyms=USD";
 
     const apiKey = process.env.CRYPTO_COMPARE_KEY;
+
     if (!apiKey) {
       errors.push("cryptocompare: CRYPTO_COMPARE_KEY is not set")
     }
@@ -47,6 +46,7 @@ export default async function handler(
     };
     const ccResponse = await fetch(cryptoCompareUrl, options);
     const ccData = await ccResponse.json();
+
     if (ccResponse.ok && ccData.USD) {
       res.status(200).json({ USD: ccData.USD });
       return;

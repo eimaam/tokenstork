@@ -9,7 +9,7 @@ export default async function handler(
 
     // Check if the API key exists
     const apiKey = process.env.FEAR_AND_GREED_API_KEY;
-    console.log("Using api key: ", apiKey, " for fear and greed")
+
     if (!apiKey) {
       throw new Error("FEAR_AND_GREED_API_KEY is not set");
     }
