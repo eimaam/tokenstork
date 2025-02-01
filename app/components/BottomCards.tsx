@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const BottomCards = () => {
   return (
-    <section className="text-white mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
+    <section className="text-white mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 px-4">
       <div className="transform transition duration-500 hover:scale-105 bg-secondary shadow-lg rounded-lg overflow-hidden my-10">
         <a
           target="_blank"
@@ -94,9 +94,9 @@ const BottomCards = () => {
           <div className="text-textcolor col-span-1">Quadrillion (P)</div>
           <div className="font-mono col-span-2">1P = 1,000,000,000,000,000</div>
           <div className="text-textcolor col-span-1">Quintillion (E)</div>
-          <div className="font-mono col-span-2">
+            <div className="font-mono col-span-2 whitespace-pre-wrap  break-all">
             1E = 1,000,000,000,000,000,000
-          </div>
+            </div>
         </div>
       </div>
     </section>
