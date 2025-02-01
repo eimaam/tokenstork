@@ -93,7 +93,7 @@ export default function Navbar({}: {}) {
           >
             <Menu
               mode="vertical"
-              selectedKeys={[pathname]}
+              selectedKeys={[pathname ?? '/']}
               items={menuItems}
               className="border-none py-2"
               style={{
