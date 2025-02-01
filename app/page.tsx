@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 import tokenIds from "@/app/utils/tokenIds.js";
 import { getTokenData } from "@/app/utils/getTokenData";
@@ -22,7 +23,6 @@ import InfoCards from "@/app/components/InfoCards";
 import TokenTable from "@/app/components/TokenTable/TokenTable";
 import Header from "./components/Header";
 
-
 // TODO: explore search example from https://github.com/vercel/nextjs-postgres-nextauth-tailwindcss-template/tree/main
 // TODO: should this be all server and zero client?
 // TODO: does the new UI work via proxy?
@@ -31,6 +31,20 @@ import Header from "./components/Header";
 type SortState = {
   column: string;
   direction: "asc" | "desc";
+};
+
+const fadeInUp = {
+  initial: { y: 20, opacity: 0 },
+  animate: { y: 0, opacity: 1 },
+  exit: { y: -20, opacity: 0 }
+};
+
+const staggerContainer = {
+  animate: {
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
 };
 
 export default function TokenDataPage() {
@@ -130,16 +144,45 @@ export default function TokenDataPage() {
   //   return <p>No token data available.</p>;
   // }
 
-
   return (
-    <main className="px-1 sm:px-2 lg:px-4 text-lg">
-      <Header />
+    <motion.main
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={staggerContainer}
+      className="px-1 sm:px-2 lg:px-4 text-lg"
+    >
+      <motion.div variants={fadeInUp}>
+        <Header />
+      </motion.div>
+
       {loading ? (
-        <TokenSkeleton />
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <TokenSkeleton />
+        </motion.div>
       ) : (
-          <TokenTable tokenData={tokenData} sortState={sortState} onSort={onSort} />
+        <motion.div 
+          variants={fadeInUp}
+          transition={{ duration: 0.5 }}
+        >
+          <TokenTable 
+            tokenData={tokenData} 
+            sortState={sortState} 
+            onSort={onSort} 
+          />
+        </motion.div>
       )}
-      <BottomCards />
-    </main>
+
+      <motion.div
+        variants={fadeInUp}
+        transition={{ delay: 0.2 }}
+      >
+        <BottomCards />
+      </motion.div>
+    </motion.main>
   );
 }

@@ -8,6 +8,23 @@ import Image from "next/image";
 import { humanizeBigNumber, formatMarketCap, getIPFSUrl } from "@/app/utils/presentationUtils";
 import FormatCategory from "@/app/components/FormatCategory";
 import { InfoCircleOutlined } from "@ant-design/icons";
+import { motion, AnimatePresence } from "framer-motion";
+
+const tableVariants = {
+  initial: { opacity: 0 },
+  animate: { 
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05
+    }
+  }
+};
+
+const rowVariants = {
+  initial: { opacity: 0, x: -20 },
+  animate: { opacity: 1, x: 0 },
+  exit: { opacity: 0, x: 20 }
+};
 
 type SortState = {
   column: string;
@@ -139,15 +156,22 @@ const TokenTable: React.FC<TokenTableProps> = ({ tokenData }) => {
   ];
 
   return (
-    <Table
-      columns={columns}
-      dataSource={tokenData}
-      rowKey="name"
-      scroll={{ x: 1500 }}
-      className="mt-6"
-      pagination={false}
-      rowClassName="hover:bg-gradient-to-r from-violet-600/20 to-indigo-600/10 transition-colors duration-200"
-    />
+    <motion.div
+      variants={tableVariants}
+      initial="initial"
+      animate="animate"
+      className="overflow-x-auto"
+    >
+      <Table
+        columns={columns}
+        dataSource={tokenData}
+        rowKey="name"
+        scroll={{ x: 1500 }}
+        className="mt-6"
+        pagination={false}
+        rowClassName="hover:bg-gradient-to-r from-violet-600/20 to-indigo-600/10 transition-colors duration-200"
+      />
+    </motion.div>
   );
 };
 
